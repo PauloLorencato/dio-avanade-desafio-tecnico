@@ -1,0 +1,59 @@
+services:
+  app_vendas:
+    build:
+      context: ./Vendas/
+      dockerfile: Dockerfile
+    container_name: app_vendas
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8001:80"
+    networks:
+      - desafio-tecnico
+
+  app_estoque:
+    build:
+      context: ./Estoque/
+      dockerfile: Dockerfile
+    container_name: app_estoque
+    restart: unless-stopped
+    ports:
+      - "8002:80"
+    networks:
+      - desafio-tecnico
+
+  postgres_db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=desafio
+      - POSTGRES_PASSWORD=postgres-password-desafio-tecnico
+      - POSTGRES_DB=desafio_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - desafio-tecnico
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=desafio
+      - POSTGRES_PASSWORD=postgres-password-desafio-tecnico
+      - POSTGRES_DB=desafio_db
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - desafio-tecnico
+
+networks:
+  desafio-tecnico:
+    name: desafio-tecnico
