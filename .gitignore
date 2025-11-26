@@ -3,3 +3,10 @@ data/
 
 # Anotações locais rápidas sobre o projeto
 todo
+
+# Arquivos de build do .NET
+bin/
+obj/
+
+# Arquivos de editor de texto
+.todo.kate-swp
